@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BUTTON_SEARCH" xml:space="preserve">
+    <value>Αναζήτηση</value>
+  </data>
+  <data name="OPT_FILES_FOLDERS" xml:space="preserve">
+    <value>Αρχεία &amp; Φάκελοι
+</value>
+  </data>
+  <data name="OPT_FILES_ONLY" xml:space="preserve">
+    <value>Αρχεία μόνο</value>
+  </data>
+  <data name="OPT_FOLDERS_ONLY" xml:space="preserve">
+    <value>Φάκελοι μόνο</value>
+  </data>
+  <data name="MENU_ABOUT" xml:space="preserve">
+    <value>Πληρο&amp;φορίες</value>
+  </data>
+  <data name="MENU_FILE" xml:space="preserve">
+    <value>Αρ&amp;χείο</value>
+  </data>
+  <data name="MENU_EXIT" xml:space="preserve">
+    <value>Έ&amp;ξοδος</value>
+  </data>
+  <data name="MENU_LANGUANGE" xml:space="preserve">
+    <value>Γλώ&amp;σσα</value>
+  </data>
+  <data name="CHECK_EXACT" xml:space="preserve">
+    <value>Ακριβές ταίριασμα</value>
+  </data>
+  <data name="COL_ELEMENT" xml:space="preserve">
+    <value>Στοιχείο</value>
+  </data>
+  <data name="COL_PATH" xml:space="preserve">
+    <value>Διαδρομή</value>
+  </data>
+  <data name="STATUS_READY" xml:space="preserve">
+    <value>Έτοιμο</value>
+  </data>
+  <data name="STATUS_SEARCHING" xml:space="preserve">
+    <value>Αναζήτηση...</value>
+  </data>
+  <data name="STATUS_TIME" xml:space="preserve">
+    <value>Διάρκεια αναζήτησης </value>
+  </data>
+  <data name="STATUS_FOUND" xml:space="preserve">
+    <value>Αποτελέσματα: </value>
+  </data>
+  <data name="MSG_TITLE_ERROR" xml:space="preserve">
+    <value>Ούουπς!</value>
+  </data>
+  <data name="MSG_NOFILTER" xml:space="preserve">
+    <value>Δεν έχετε ορίσει κάποιο κριτήριο αναζήτησης!</value>
+  </data>
+  <data name="MSG_FILENOTFOUND" xml:space="preserve">
+    <value>Το αρχείο δεν βρέθηκε!</value>
+  </data>
+  <data name="FRM_TITLE" xml:space="preserve">
+    <value>Εύρηκα!</value>
+  </data>
+  <data name="MSG_NODRIVE" xml:space="preserve">
+    <value>Δεν έχετε επιλέξει το δίσκο στον οποίο θα πραγματοποιηθεί η αναζήτηση.
+Αν η λίστα είναι κενή, δεν θα βρέθηκε κανένας δίσκος με σύστημα αρχείων NTFS.</value>
+  </data>
+  <data name="MENU_REFRESH" xml:space="preserve">
+    <value>Aνανέ&amp;ωση</value>
+  </data>
+  <data name="MENU_EXIT_TIP" xml:space="preserve">
+    <value>Έξοδος από το πρόγραμμα</value>
+  </data>
+  <data name="MENU_REFRESH_TIP" xml:space="preserve">
+    <value>Ανανέωση της λίστας με τις NTFS συνδεδεμένες μονάδες δίσκου</value>
+  </data>
+</root>
