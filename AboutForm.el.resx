@@ -112,16 +112,16 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FRM_TITLE" xml:space="preserve">
     <value>Πληροφορίες...</value>
   </data>
   <data name="LABEL_DESCRIPT" xml:space="preserve">
-    <value>Εύρηκα! v1.0
+    <value>Εύρηκα! v1.1
 Ταχεία αναζήτηση αρχείων για τόμους NTFS
 
 Copytight (c) 2019, Πέτρος Κυλαδίτης</value>
@@ -129,7 +129,7 @@ Copytight (c) 2019, Πέτρος Κυλαδίτης</value>
   <data name="TEXT_LICENSE" xml:space="preserve">
     <value>Αυτό το πρόγραμμα είναι ελεύθερο λογισμικό που διανέμεται υπό τους όρους της άδειας GNU GPL 3,  για τις λεπτομέρειες της άδειας δείτε στο αρχείο 'license.txt', που διανέμεται με αυτό το πρόγραμμα, ή μπορείτε να δείτε στον ιστότοπο &lt;www.gnu.org/licenses/&gt;.
 
-Βασισμένο σε αντικείμενα λογισμικού του MTFScanner &lt;http://archive.codeplex.com/?p=mftscanner&gt; και του StCroixSkipper's USN Journal Explorer &lt;www.dreamincode.net/forums/blog/1017-stcroixskippers&gt;</value>
+Βασισμένο σε αντικείμενα λογισμικού του MTFScanner &lt;http://archive.codeplex.com/?p=mftscanner&gt; και του StCroixSkipper's USN Journal Explorer &lt;www.dreamincode.net/forums/blog/1017-stcroixskippers&gt; και σε απόσπασμα του Roland Bogosi's TV-Show Tracker &lt;https://github.com/RoliSoft/RS-TV-Show-Tracker&gt;</value>
   </data>
   <data name="BTN_SHOWLIC" xml:space="preserve">
     <value>Προβολή άδειας χρήσης</value>

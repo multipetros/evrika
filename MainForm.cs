@@ -6,7 +6,6 @@
  */
  
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
@@ -14,7 +13,6 @@ using System.Diagnostics;
 using System.Resources;
 using System.Globalization;
 using System.ComponentModel;
-using PInvoke;
 using UsnJournal;
 using Multipetros.Config;
 
@@ -26,6 +24,10 @@ namespace Evrika{
 		private const string RES_OPT_FILES_FOLDERS = "OPT_FILES_FOLDERS" ;
 		private const string RES_OPT_FILES_ONLY = "OPT_FILES_ONLY" ;
 		private const string RES_OPT_FOLDERS_ONLY = "OPT_FOLDERS_ONLY" ;
+		private const string RES_MATCH_EXACT = "MATCH_EXACT" ;
+		private const string RES_MATCH_CONTAINS = "MATCH_CONTAINS" ;
+		private const string RES_MATCH_STARTS = "MATCH_STARTS" ;
+		private const string RES_MATCH_ENDS = "MATCH_ENDS" ;
 		private const string RES_MENU_ABOUT = "MENU_ABOUT" ;
 		private const string RES_MENU_FILE = "MENU_FILE" ;
 		private const string RES_MENU_EXIT = "MENU_EXIT" ;
@@ -33,7 +35,8 @@ namespace Evrika{
 		private const string RES_MENU_REFRESH = "MENU_REFRESH" ;
 		private const string RES_MENU_EXIT_TIP = "MENU_EXIT_TIP" ;		
 		private const string RES_MENU_REFRESH_TIP = "MENU_REFRESH_TIP" ;
-		private const string RES_CHECK_EXACT = "CHECK_EXACT" ;
+		private const string RES_MENU_LANGUAGE_TIP = "MENU_LANGUAGE_TIP" ;
+		private const string RES_MENU_ABOUT_TIP = "MENU_ABOUT_TIP" ;
 		private const string RES_COL_ELEMENT = "COL_ELEMENT" ;
 		private const string RES_COL_PATH = "COL_PATH" ;
 		private const string RES_STATUS_READY = "STATUS_READY" ;
@@ -54,15 +57,13 @@ namespace Evrika{
 		private const string INI_WND_TOP = "wndtop" ;
 		private const string INI_WND_LEFT = "wndleft" ;
 		private const string INI_LANG = "lang" ;
-		private const string INI_EXACT = "exact" ;
 		private const string INI_TYPE = "type" ;
+		private const string INI_MATCH = "match" ;
 		
 		//init vars
 		private ResourceManager resmgr ;
 		private CultureInfo ci ;
 		private RegistryIni ini ;
-		private	TimeSpan elapsedTime ;
-		private	DateTime startTime ;
 		
 		public MainForm(){
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -88,8 +89,7 @@ namespace Evrika{
 		
 		private void LoadRes(){			
 			this.Text = GetRes(RES_FRM_TITLE) ;
-			buttonSearch.Text = GetRes(RES_BUTTON_SEARCH) ;			
-			checkBoxExactMatch.Text = GetRes(RES_CHECK_EXACT) ;
+			buttonSearch.Text = GetRes(RES_BUTTON_SEARCH) ;
 			
 			columnHeaderName.Text = GetRes(RES_COL_ELEMENT) ;
 			columnHeaderPath.Text = GetRes(RES_COL_PATH) ;
@@ -100,11 +100,20 @@ namespace Evrika{
 			aboutToolStripMenuItem.Text = GetRes(RES_MENU_ABOUT) ;
 			refreshToolStripMenuItem.Text = GetRes(RES_MENU_REFRESH) ;
 			
+			int curId = comboBoxType.SelectedIndex ;
 			comboBoxType.Items.Clear() ;
 			comboBoxType.Items.Add(GetRes(RES_OPT_FILES_FOLDERS)) ;
 			comboBoxType.Items.Add(GetRes(RES_OPT_FILES_ONLY)) ;
 			comboBoxType.Items.Add(GetRes(RES_OPT_FOLDERS_ONLY)) ;
-			comboBoxType.SelectedIndex = 0 ;
+			comboBoxType.SelectedIndex = curId < 0 ? 0 : curId ;
+			
+			curId = comboBoxMatch.SelectedIndex ;
+			comboBoxMatch.Items.Clear() ;
+			comboBoxMatch.Items.Add(GetRes(RES_MATCH_EXACT)) ;
+			comboBoxMatch.Items.Add(GetRes(RES_MATCH_CONTAINS)) ;
+			comboBoxMatch.Items.Add(GetRes(RES_MATCH_STARTS)) ;
+			comboBoxMatch.Items.Add(GetRes(RES_MATCH_ENDS)) ;
+			comboBoxMatch.SelectedIndex = curId < 0 ? 0 : curId ;
 
 			toolStripStatusLabel1.Text = GetRes(RES_STATUS_READY) ;
 			toolStripStatusLabel2.Visible = false ;
@@ -126,9 +135,10 @@ namespace Evrika{
 			if(type < 0 || type > 2) type = 0 ;
 			comboBoxType.SelectedIndex = type ;
 			
-			bool exact ;
-			bool.TryParse(ini[INI_EXACT], out exact) ;
-			checkBoxExactMatch.Checked = exact ;
+			int macth ;
+			int.TryParse(ini[INI_MATCH], out macth) ;
+			if(macth < 0 || macth > 3) macth = 0 ;
+			comboBoxMatch.SelectedIndex = macth ;
 		}
 		
 		private void LoadLangSetting(){
@@ -147,9 +157,9 @@ namespace Evrika{
 		}
 		
 		private void StoreSettings(){
-			ini[INI_EXACT] = checkBoxExactMatch.Checked.ToString() ;
 			ini[INI_LANG] = this.ci.TwoLetterISOLanguageName ;
 			ini[INI_TYPE] = comboBoxType.SelectedIndex.ToString() ;
+			ini[INI_MATCH] = comboBoxMatch.SelectedIndex.ToString() ;
 			ini[INI_WND_LEFT] = this.Left.ToString() ;
 			ini[INI_WND_TOP] = this.Top.ToString() ;
 		}
@@ -160,22 +170,24 @@ namespace Evrika{
 			}else if(textBoxFilter.Text.Length < 1){
 				MessageBox.Show(GetRes(RES_MSG_NOFILTER), GetRes(RES_MSG_TITLE_ERROR), MessageBoxButtons.OK, MessageBoxIcon.Exclamation) ;
 			}else{
-				toolStripStatusLabel1.Text = GetRes(RES_STATUS_SEARCHING) ;
-				listViewFiles.Items.Clear() ;
-				listViewFiles.BeginUpdate() ;
+				toolStripStatusLabel1.Text = GetRes(RES_STATUS_SEARCHING) ;				
+				TimeSpan elapsedTime ;
+				DateTime startTime ;
 				startTime = DateTime.Now;
+				listViewFiles.Items.Clear() ;
+				this.Refresh() ;
+				listViewFiles.BeginUpdate() ;
 				try {
 					NtfsUsnJournal.SearchType sType = (NtfsUsnJournal.SearchType)comboBoxType.SelectedIndex ;
-					List<NtfsWinApi.UsnEntry> usnList  = new List<NtfsWinApi.UsnEntry>() ;
+					NtfsUsnJournal.ComparisonType cType = (NtfsUsnJournal.ComparisonType)comboBoxMatch.SelectedIndex ;
+					UsnJournal.FileSet[] results  ;
 					NtfsUsnJournal ntfs = new NtfsUsnJournal(new DriveInfo(comboBoxDrive.SelectedItem.ToString())) ;
-					NtfsUsnJournal.UsnJournalReturnCode code = ntfs.GetFilesMatchingName(out usnList, textBoxFilter.Text, sType, checkBoxExactMatch.Checked) ;
+					NtfsUsnJournal.UsnJournalReturnCode code = ntfs.GetFilesMatchingName(out results, textBoxFilter.Text, sType, cType) ;
 					if(code == NtfsUsnJournal.UsnJournalReturnCode.USN_JOURNAL_SUCCESS){
-						string filePath = null ;
-						int itemsCount = usnList.Count ;
+						int itemsCount = results.Length ;
 						ListViewItem[] lvItems = new ListViewItem[itemsCount] ;
 						for(int i=0; i<itemsCount; i++){
-							ntfs.GetPathFromFileReference(usnList[i].FileReferenceNumber, out filePath) ;
-							lvItems[i] = new ListViewItem(new String[]{usnList[i].Name, filePath}) ;
+							lvItems[i] = new ListViewItem(new String[]{results[i].Name, results[i].Path}) ;
 						}
 						listViewFiles.Items.AddRange(lvItems) ;
 						
@@ -257,6 +269,14 @@ namespace Evrika{
 		
 		void ExitToolStripMenuItemMouseEnter(object sender, EventArgs e){
 			toolStripStatusLabel4.Text = GetRes(RES_MENU_EXIT_TIP) ;
+		}
+		
+		void LangToolStripMenuItemMouseEnter(object sender, EventArgs e){
+			toolStripStatusLabel4.Text = GetRes(RES_MENU_LANGUAGE_TIP) ;
+		}
+		
+		void AboutToolStripMenuItemMouseEnter(object sender, EventArgs e){
+			toolStripStatusLabel4.Text = GetRes(RES_MENU_ABOUT_TIP) ;
 		}
 	}
 }

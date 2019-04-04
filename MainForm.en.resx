@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BUTTON_SEARCH" xml:space="preserve">
     <value>Search</value>
@@ -140,9 +140,6 @@
   </data>
   <data name="MENU_LANGUANGE" xml:space="preserve">
     <value>Lan&amp;guage</value>
-  </data>
-  <data name="CHECK_EXACT" xml:space="preserve">
-    <value>Exact match</value>
   </data>
   <data name="COL_ELEMENT" xml:space="preserve">
     <value>Element</value>
@@ -186,5 +183,23 @@ If list is empty, there is no NTFS volume  on your system.</value>
   </data>
   <data name="MENU_REFRESH_TIP" xml:space="preserve">
     <value>Refresh the listh with NTFS connected volumes</value>
+  </data>
+  <data name="MENU_LANGUAGE_TIP" xml:space="preserve">
+    <value>Change UI language</value>
+  </data>
+  <data name="MENU_ABOUT_TIP" xml:space="preserve">
+    <value>Info about this program</value>
+  </data>
+  <data name="MATCH_EXACT" xml:space="preserve">
+    <value>Exact match</value>
+  </data>
+  <data name="MATCH_CONTAINS" xml:space="preserve">
+    <value>Contained</value>
+  </data>
+  <data name="MATCH_STARTS" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="MATCH_ENDS" xml:space="preserve">
+    <value>Ends with</value>
   </data>
 </root>

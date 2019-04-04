@@ -1,6 +1,7 @@
 ﻿/* 
  * Based on NtfsUsnJournal.cs of MTFScanner <http://archive.codeplex.com/?p=mftscanner> 
  * and StCroixSkipper's USN Journal Explorer <www.dreamincode.net/forums/blog/1017-stcroixskippers>
+ * and snippet Roland Bogosi's TV-Show Tracker <https://github.com/RoliSoft/RS-TV-Show-Tracker>
  * 
  * In this class variant:
  * - Some unnecessary methods removed
@@ -10,23 +11,46 @@
  *   providing also options for serach type (see SearchType enum), and exact search,
  *   end search be more efficient.
  * - Support for X64 builds added.
+ * - GetFilesMatchingName combined with GetPathFromFileReference functionality,
+ *   avoiding the GetPathFromFileReference API calls, and use parallelism to speedup
+ *   the results.  
  * 
  *   2019, Petros Kyladitis, for Evrika project
  */
  
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-
-using PInvoke;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 using System.Globalization;
+using PInvoke;
 
 namespace UsnJournal{
+	public class FileSet{
+		private string name ;
+		private string path ;
+		
+		public FileSet(){ }
+		
+		public FileSet(string name, string path){
+			this.name = name ;
+			this.path = path ;
+		}
+		
+		public string Name{
+			get{ return this.name ; }
+			set{ this.name = value ; }
+		}
+		
+		public string Path{
+			get{ return this.path ; }
+			set{ this.path = value ; }
+		}
+	}
+	
     public class NtfsUsnJournal : IDisposable{
         #region enums
         
@@ -35,6 +59,13 @@ namespace UsnJournal{
 			FILES_ONLY = 1,
 			FOLDERS_ONLY = 2
 		} ;
+        
+        public enum ComparisonType{
+        	EXACT_MATCH = 0,
+        	CONTAINS = 1,
+        	STARTS_WITH = 2,
+        	ENDS_WITH = 3
+        }
         
         public enum UsnJournalReturnCode{
             INVALID_HANDLE_VALUE = -1,
@@ -174,10 +205,12 @@ namespace UsnJournal{
 
         #endregion
 
-        #region public methods
-        public UsnJournalReturnCode GetFilesMatchingName(out List<NtfsWinApi.UsnEntry> files, string filter, SearchType search, bool exactMatch){
+        #region public methods        
+        public UsnJournalReturnCode GetFilesMatchingName(out FileSet[] results, string filter, SearchType search, ComparisonType comparison){
+        	results = null ;
             filter = filter.ToLower();
-            files = new List<NtfsWinApi.UsnEntry>();
+            ConcurrentBag<NtfsWinApi.UsnEntry> files = new ConcurrentBag<NtfsWinApi.UsnEntry>()  ;
+            ConcurrentDictionary<ulong, NtfsWinApi.UsnEntry> dirs = new ConcurrentDictionary<ulong, NtfsWinApi.UsnEntry>() ;            
             UsnJournalReturnCode usnRtnCode = UsnJournalReturnCode.VOLUME_NOT_NTFS;
 
             if (bNtfsVolume){
@@ -233,17 +266,41 @@ namespace UsnJournal{
                                 	(search == SearchType.FILES_ONLY && usnEntry.IsFile) ||
                                 	(search == SearchType.FOLDERS_ONLY && usnEntry.IsFolder)
                                 ){
-                                	if(exactMatch){
+                                	switch (comparison) {
+                                		case ComparisonType.EXACT_MATCH:
+                                			if(compInf.Compare(usnEntry.Name, filter, compOpts) == 0)
+                                				files.Add(usnEntry) ;
+                                			break ;
+                                		case ComparisonType.CONTAINS:
+                                			if(compInf.IndexOf(usnEntry.Name, filter, compOpts)  > -1)                             			
+                                				files.Add(usnEntry) ;
+                                			break ;
+                                		case ComparisonType.STARTS_WITH:
+                                			if(compInf.IndexOf(usnEntry.Name, filter, compOpts) == 0)
+                                				files.Add(usnEntry) ;
+                                			break ;
+                                		case ComparisonType.ENDS_WITH:
+                                			if(usnEntry.Name.Length >= filter.Length){
+                                				if(compInf.LastIndexOf(usnEntry.Name, filter, compOpts) + filter.Length == usnEntry.Name.Length){
+                                					files.Add(usnEntry) ;
+                                				}
+                                			}
+                                			break ;
+                                	}
+                                	/*if(exactMatch){
                                 		if(compInf.Compare(usnEntry.Name, filter, compOpts) == 0){
                                 			files.Add(usnEntry) ;
                                 		}
                                 	}else{
-                                		if(compInf.IndexOf(usnEntry.Name, filter, compOpts)  > -1){
+                                		if(compInf.IndexOf(usnEntry.Name, filter, compOpts)  > -1){                                			
                                 			files.Add(usnEntry) ;
                                 		}
-                                	}
+                                	}*/
                         				
                                 }
+                                
+                                if(usnEntry.IsFolder)
+                                	dirs.TryAdd(usnEntry.FileReferenceNumber, usnEntry) ;
                                 
                                 pUsnRecord = new IntPtr((this.IsX64 ? pUsnRecord.ToInt64() : pUsnRecord.ToInt32()) + usnEntry.RecordLength);
                                 outBytesReturned -= usnEntry.RecordLength;
@@ -253,120 +310,30 @@ namespace UsnJournal{
 
                         Marshal.FreeHGlobal(pData);
                         usnRtnCode = ConvertWin32ErrorToUsnError((NtfsWinApi.GetLastErrorEnum)Marshal.GetLastWin32Error());
-                        if (usnRtnCode == UsnJournalReturnCode.ERROR_HANDLE_EOF){
+                        if (usnRtnCode == UsnJournalReturnCode.ERROR_HANDLE_EOF)
                             usnRtnCode = UsnJournalReturnCode.USN_JOURNAL_SUCCESS;
-                        }
+            
+			            if (usnRtnCode == UsnJournalReturnCode.USN_JOURNAL_SUCCESS){
+				            ConcurrentBag<FileSet> resultsBag = new ConcurrentBag<FileSet>() ;
+				            files.AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount).ForAll(
+				            	file => {
+				            		Stack<string> names = new Stack<string>() ;
+				            		NtfsWinApi.UsnEntry current = file ;
+				            		do{
+				            			names.Push(current.Name) ;
+				            		}while(dirs.TryGetValue(current.ParentFileReferenceNumber, out current)) ;            		
+				            		resultsBag.Add(new FileSet(file.Name, (this.driveInfo.Name + string.Join("\\", names)))) ;
+				            	}) ;
+				            
+				            results = resultsBag.ToArray() ;
+			            }
                     }
                 }
                 else{
                     usnRtnCode = UsnJournalReturnCode.INVALID_HANDLE_VALUE;
                 }
             }
-            files.Sort();
-            return usnRtnCode;
-        }
-
-        /// <summary>
-        /// Given a file reference number GetPathFromFrn() calculates the full path in the out parameter 'path'.
-        /// </summary>
-        /// <param name="frn">A 64-bit file reference number</param>
-        /// <returns>
-        /// USN_JOURNAL_SUCCESS                 GetPathFromFrn() function succeeded. 
-        /// VOLUME_NOT_NTFS                     volume is not an NTFS volume.
-        /// INVALID_HANDLE_VALUE                NtfsUsnJournal object failed initialization.
-        /// ERROR_ACCESS_DENIED                 accessing the usn journal requires admin rights, see remarks.
-        /// INVALID_FILE_REFERENCE_NUMBER       file reference number not found in Master File Table.
-        /// ERROR_INVALID_FUNCTION              error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_FILE_NOT_FOUND                error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_PATH_NOT_FOUND                error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_TOO_MANY_OPEN_FILES           error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_INVALID_HANDLE                error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_INVALID_DATA                  error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_NOT_SUPPORTED                 error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_INVALID_PARAMETER             error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// ERROR_INVALID_USER_BUFFER           error generated by NtCreateFile() or NtQueryInformationFile() call.
-        /// USN_JOURNAL_ERROR                   unspecified usn journal error.
-        /// </returns>
-        /// <remarks>
-        /// If function returns ERROR_ACCESS_DENIED you need to run application as an Administrator.
-        /// </remarks>
-
-        public UsnJournalReturnCode GetPathFromFileReference(UInt64 frn, out string path){
-            path = "";
-            UsnJournalReturnCode usnRtnCode = UsnJournalReturnCode.VOLUME_NOT_NTFS;
-
-            if (bNtfsVolume){
-                if (this.usnJournalRootHandle.ToInt32() != NtfsWinApi.INVALID_HANDLE_VALUE){
-                    if (frn != 0){
-                        usnRtnCode = UsnJournalReturnCode.USN_JOURNAL_SUCCESS;
-
-                        long allocSize = 0;
-                        NtfsWinApi.UNICODE_STRING unicodeString;
-                        NtfsWinApi.OBJECT_ATTRIBUTES objAttributes = new NtfsWinApi.OBJECT_ATTRIBUTES();
-                        NtfsWinApi.IO_STATUS_BLOCK ioStatusBlock = new NtfsWinApi.IO_STATUS_BLOCK();
-                        IntPtr hFile = IntPtr.Zero;
-
-                        IntPtr buffer = Marshal.AllocHGlobal(4096);
-                        IntPtr refPtr = Marshal.AllocHGlobal(8);
-                        IntPtr objAttIntPtr = Marshal.AllocHGlobal(Marshal.SizeOf(objAttributes));
-
-                        //
-                        // pointer >> fileid
-                        //
-                        Marshal.WriteInt64(refPtr, (long)frn);
-
-                        unicodeString.Length = 8;
-                        unicodeString.MaximumLength = 8;
-                        unicodeString.Buffer = refPtr;
-                        //
-                        // copy unicode structure to pointer
-                        //
-                        Marshal.StructureToPtr(unicodeString, objAttIntPtr, true);
-
-                        //
-                        //  InitializeObjectAttributes 
-                        //
-                        objAttributes.Length = Marshal.SizeOf(objAttributes);
-                        objAttributes.ObjectName = objAttIntPtr;
-                        objAttributes.RootDirectory = this.usnJournalRootHandle;
-                        objAttributes.Attributes = (int)NtfsWinApi.OBJ_CASE_INSENSITIVE;
-
-                        int fOk = NtfsWinApi.NtCreateFile(
-                            ref hFile,
-                            FileAccess.Read,
-                            ref objAttributes,
-                            ref ioStatusBlock,
-                            ref allocSize,
-                            0,
-                            FileShare.ReadWrite,
-                            NtfsWinApi.FILE_OPEN,
-                            NtfsWinApi.FILE_OPEN_BY_FILE_ID | NtfsWinApi.FILE_OPEN_FOR_BACKUP_INTENT,
-                            IntPtr.Zero, 0);
-                        if (fOk == 0){
-                            fOk = NtfsWinApi.NtQueryInformationFile(
-                                hFile,
-                                ref ioStatusBlock,
-                                buffer,
-                                4096,
-                                NtfsWinApi.FILE_INFORMATION_CLASS.FileNameInformation);
-                            if (fOk == 0){
-                                //
-                                // first 4 bytes are the name length
-                                //
-                                int nameLength = Marshal.ReadInt32(buffer, 0);
-                                //
-                                // next bytes are the name
-                                //
-                                path = this.RootDirectory.Name.Substring(0, 2) + Marshal.PtrToStringUni(new IntPtr(buffer.ToInt32() + 4), nameLength / 2);
-                            }
-                        }
-                        NtfsWinApi.CloseHandle(hFile);
-                        Marshal.FreeHGlobal(buffer);
-                        Marshal.FreeHGlobal(objAttIntPtr);
-                        Marshal.FreeHGlobal(refPtr);
-                    }
-                }
-            }
+            
             return usnRtnCode;
         }
 

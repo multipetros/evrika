@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BUTTON_SEARCH" xml:space="preserve">
     <value>Αναζήτηση</value>
@@ -141,9 +141,6 @@
   </data>
   <data name="MENU_LANGUANGE" xml:space="preserve">
     <value>Γλώ&amp;σσα</value>
-  </data>
-  <data name="CHECK_EXACT" xml:space="preserve">
-    <value>Ακριβές ταίριασμα</value>
   </data>
   <data name="COL_ELEMENT" xml:space="preserve">
     <value>Στοιχείο</value>
@@ -187,5 +184,23 @@
   </data>
   <data name="MENU_REFRESH_TIP" xml:space="preserve">
     <value>Ανανέωση της λίστας με τις NTFS συνδεδεμένες μονάδες δίσκου</value>
+  </data>
+  <data name="MENU_LANGUAGE_TIP" xml:space="preserve">
+    <value>Αλλαγή γλώσσας εμφάνισης</value>
+  </data>
+  <data name="MENU_ABOUT_TIP" xml:space="preserve">
+    <value>Πληροφορίες για το πρόγραμμα</value>
+  </data>
+  <data name="MATCH_EXACT" xml:space="preserve">
+    <value>Ακριβές ταίριασμα</value>
+  </data>
+  <data name="MATCH_CONTAINS" xml:space="preserve">
+    <value>Περιέχεται</value>
+  </data>
+  <data name="MATCH_STARTS" xml:space="preserve">
+    <value>Αρχίζει με</value>
+  </data>
+  <data name="MATCH_ENDS" xml:space="preserve">
+    <value>Τελειώνει σε</value>
   </data>
 </root>

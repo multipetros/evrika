@@ -112,16 +112,16 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FRM_TITLE" xml:space="preserve">
     <value>About...</value>
   </data>
   <data name="LABEL_DESCRIPT" xml:space="preserve">
-    <value>Evrika! v1.0
+    <value>Evrika! v1.1
 Fast file search for NTFS volumes
 
 Copytight (c) 2019, Petros Kyladitis</value>
@@ -129,7 +129,7 @@ Copytight (c) 2019, Petros Kyladitis</value>
   <data name="TEXT_LICENSE" xml:space="preserve">
     <value>This program is free software distributed under the GNU GPL 3, for license details see at 'license.txt' file, distributed with this program, or see at &lt;www.gnu.org/licenses/&gt;.
 
-Based on software objects of MTFScanner &lt;http://archive.codeplex.com/?p=mftscanner&gt; and StCroixSkipper's USN Journal Explorer &lt;www.dreamincode.net/forums/blog/1017-stcroixskippers&gt;</value>
+Based on software objects of MTFScanner &lt;http://archive.codeplex.com/?p=mftscanner&gt; and StCroixSkipper's USN Journal Explorer &lt;www.dreamincode.net/forums/blog/1017-stcroixskippers&gt; and snippet Roland Bogosi's TV-Show Tracker &lt;https://github.com/RoliSoft/RS-TV-Show-Tracker&gt;</value>
   </data>
   <data name="BTN_SHOWLIC" xml:space="preserve">
     <value>Show license</value>

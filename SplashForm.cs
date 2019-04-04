@@ -57,9 +57,11 @@ namespace Evrika{
 					break ;
 				}
 			}
-				List<NtfsWinApi.UsnEntry> usnList  = new List<NtfsWinApi.UsnEntry>() ;
+				//List<NtfsWinApi.UsnEntry> usnList  = new List<NtfsWinApi.UsnEntry>() ;
+				UsnJournal.FileSet[] results  ;
 				NtfsUsnJournal ntfs = new NtfsUsnJournal(new DriveInfo(drive)) ;
-				NtfsUsnJournal.UsnJournalReturnCode code = ntfs.GetFilesMatchingName(out usnList, appExe, NtfsUsnJournal.SearchType.FILES_ONLY, true) ;
+				//NtfsUsnJournal.UsnJournalReturnCode code = ntfs.GetFilesMatchingName(out results, appExe, NtfsUsnJournal.SearchType.FILES_ONLY, true) ;
+				NtfsUsnJournal.UsnJournalReturnCode code = ntfs.GetFilesMatchingName(out results, appExe, NtfsUsnJournal.SearchType.FILES_ONLY, NtfsUsnJournal.ComparisonType.EXACT_MATCH) ;
 			}catch(Exception){}
 		}
 		

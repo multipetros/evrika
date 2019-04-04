@@ -10,14 +10,11 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using Microsoft.Win32;
 using System.ComponentModel;
-using Microsoft.Win32.SafeHandles;
 
 namespace PInvoke{
     public class NtfsWinApi{
@@ -433,9 +430,9 @@ namespace PInvoke{
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct BY_HANDLE_FILE_INFORMATION{
             public uint FileAttributes;
-            public FILETIME CreationTime;
-            public FILETIME LastAccessTime;
-            public FILETIME LastWriteTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME CreationTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastAccessTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME LastWriteTime;
             public uint VolumeSerialNumber;
             public uint FileSizeHigh;
             public uint FileSizeLow;

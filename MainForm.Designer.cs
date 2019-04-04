@@ -37,7 +37,6 @@ namespace Evrika
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.buttonSearch = new System.Windows.Forms.Button();
 			this.comboBoxType = new System.Windows.Forms.ComboBox();
-			this.checkBoxExactMatch = new System.Windows.Forms.CheckBox();
 			this.textBoxFilter = new System.Windows.Forms.TextBox();
 			this.comboBoxDrive = new System.Windows.Forms.ComboBox();
 			this.listViewFiles = new System.Windows.Forms.ListView();
@@ -58,6 +57,7 @@ namespace Evrika
 			this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.comboBoxMatch = new System.Windows.Forms.ComboBox();
 			this.menuStripMain.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -77,18 +77,10 @@ namespace Evrika
 			// 
 			this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxType.FormattingEnabled = true;
-			this.comboBoxType.Location = new System.Drawing.Point(649, 3);
+			this.comboBoxType.Location = new System.Drawing.Point(658, 3);
 			this.comboBoxType.Name = "comboBoxType";
 			this.comboBoxType.Size = new System.Drawing.Size(116, 21);
 			this.comboBoxType.TabIndex = 5;
-			// 
-			// checkBoxExactMatch
-			// 
-			this.checkBoxExactMatch.Location = new System.Drawing.Point(520, 3);
-			this.checkBoxExactMatch.Name = "checkBoxExactMatch";
-			this.checkBoxExactMatch.Size = new System.Drawing.Size(123, 24);
-			this.checkBoxExactMatch.TabIndex = 4;
-			this.checkBoxExactMatch.UseVisualStyleBackColor = true;
 			// 
 			// textBoxFilter
 			// 
@@ -109,8 +101,8 @@ namespace Evrika
 			// listViewFiles
 			// 
 			this.listViewFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-									this.columnHeaderName,
-									this.columnHeaderPath});
+			this.columnHeaderName,
+			this.columnHeaderPath});
 			this.listViewFiles.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewFiles.FullRowSelect = true;
 			this.listViewFiles.GridLines = true;
@@ -118,6 +110,7 @@ namespace Evrika
 			this.listViewFiles.Name = "listViewFiles";
 			this.listViewFiles.ShowItemToolTips = true;
 			this.listViewFiles.Size = new System.Drawing.Size(778, 468);
+			this.listViewFiles.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.listViewFiles.TabIndex = 6;
 			this.listViewFiles.UseCompatibleStateImageBehavior = false;
 			this.listViewFiles.View = System.Windows.Forms.View.Details;
@@ -136,9 +129,9 @@ namespace Evrika
 			// menuStripMain
 			// 
 			this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.fileToolStripMenuItem,
-									this.langToolStripMenuItem,
-									this.aboutToolStripMenuItem});
+			this.fileToolStripMenuItem,
+			this.langToolStripMenuItem,
+			this.aboutToolStripMenuItem});
 			this.menuStripMain.Location = new System.Drawing.Point(0, 0);
 			this.menuStripMain.Name = "menuStripMain";
 			this.menuStripMain.Size = new System.Drawing.Size(784, 24);
@@ -148,8 +141,8 @@ namespace Evrika
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.refreshToolStripMenuItem,
-									this.exitToolStripMenuItem});
+			this.refreshToolStripMenuItem,
+			this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
 			this.fileToolStripMenuItem.Text = "file";
@@ -159,9 +152,9 @@ namespace Evrika
 			this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
 			this.refreshToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
 			this.refreshToolStripMenuItem.Text = "refresh";
-			this.refreshToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
-			this.refreshToolStripMenuItem.MouseEnter += new System.EventHandler(this.RefreshToolStripMenuItemMouseEnter);
 			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.RefreshToolStripMenuItemClick);
+			this.refreshToolStripMenuItem.MouseEnter += new System.EventHandler(this.RefreshToolStripMenuItemMouseEnter);
+			this.refreshToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
 			// 
 			// exitToolStripMenuItem
 			// 
@@ -169,18 +162,20 @@ namespace Evrika
 			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
 			this.exitToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
 			this.exitToolStripMenuItem.Text = "exit";
-			this.exitToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
-			this.exitToolStripMenuItem.MouseEnter += new System.EventHandler(this.ExitToolStripMenuItemMouseEnter);
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
+			this.exitToolStripMenuItem.MouseEnter += new System.EventHandler(this.ExitToolStripMenuItemMouseEnter);
+			this.exitToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
 			// 
 			// langToolStripMenuItem
 			// 
 			this.langToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.greekToolStripMenuItem,
-									this.englishToolStripMenuItem});
+			this.greekToolStripMenuItem,
+			this.englishToolStripMenuItem});
 			this.langToolStripMenuItem.Name = "langToolStripMenuItem";
 			this.langToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
 			this.langToolStripMenuItem.Text = "lang";
+			this.langToolStripMenuItem.MouseEnter += new System.EventHandler(this.LangToolStripMenuItemMouseEnter);
+			this.langToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
 			// 
 			// greekToolStripMenuItem
 			// 
@@ -205,14 +200,16 @@ namespace Evrika
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
 			this.aboutToolStripMenuItem.Text = "about";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
+			this.aboutToolStripMenuItem.MouseEnter += new System.EventHandler(this.AboutToolStripMenuItemMouseEnter);
+			this.aboutToolStripMenuItem.MouseLeave += new System.EventHandler(this.ToolStripMenuItemMouseLeave);
 			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.toolStripStatusLabel1,
-									this.toolStripStatusLabel2,
-									this.toolStripStatusLabel3,
-									this.toolStripStatusLabel4});
+			this.toolStripStatusLabel1,
+			this.toolStripStatusLabel2,
+			this.toolStripStatusLabel3,
+			this.toolStripStatusLabel4});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 538);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.ShowItemToolTips = true;
@@ -266,7 +263,7 @@ namespace Evrika
 			this.flowLayoutPanel1.Controls.Add(this.comboBoxDrive);
 			this.flowLayoutPanel1.Controls.Add(this.textBoxFilter);
 			this.flowLayoutPanel1.Controls.Add(this.buttonSearch);
-			this.flowLayoutPanel1.Controls.Add(this.checkBoxExactMatch);
+			this.flowLayoutPanel1.Controls.Add(this.comboBoxMatch);
 			this.flowLayoutPanel1.Controls.Add(this.comboBoxType);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
@@ -274,6 +271,15 @@ namespace Evrika
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(778, 34);
 			this.flowLayoutPanel1.TabIndex = 0;
 			this.flowLayoutPanel1.WrapContents = false;
+			// 
+			// comboBoxMatch
+			// 
+			this.comboBoxMatch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxMatch.FormattingEnabled = true;
+			this.comboBoxMatch.Location = new System.Drawing.Point(520, 3);
+			this.comboBoxMatch.Name = "comboBoxMatch";
+			this.comboBoxMatch.Size = new System.Drawing.Size(132, 21);
+			this.comboBoxMatch.TabIndex = 6;
 			// 
 			// MainForm
 			// 
@@ -288,8 +294,8 @@ namespace Evrika
 			this.MainMenuStrip = this.menuStripMain;
 			this.MinimumSize = new System.Drawing.Size(800, 600);
 			this.Name = "MainForm";
-			this.Load += new System.EventHandler(this.MainFormLoad);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormFormClosed);
+			this.Load += new System.EventHandler(this.MainFormLoad);
 			this.menuStripMain.ResumeLayout(false);
 			this.menuStripMain.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
@@ -299,6 +305,7 @@ namespace Evrika
 			this.flowLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
+
 		}
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
 		private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
@@ -311,7 +318,6 @@ namespace Evrika
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
 		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.CheckBox checkBoxExactMatch;
 		private System.Windows.Forms.TextBox textBoxFilter;
 		private System.Windows.Forms.MenuStrip menuStripMain;
 		private System.Windows.Forms.ListView listViewFiles;
@@ -323,5 +329,6 @@ namespace Evrika
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ComboBox comboBoxType;
 		private System.Windows.Forms.ComboBox comboBoxDrive;
+		private System.Windows.Forms.ComboBox comboBoxMatch;
 	}
 }

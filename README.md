@@ -1,5 +1,5 @@
 # Evrika 
-## v1.0
+## v1.1
 Copyright (C) 2019, Petros Kyladitis  
    
 [English](#en) - [Ελληνικά](#el)
@@ -12,17 +12,21 @@ Fast file & folder search for NTFS volumes.
 For updates and more info see at <http://multipetros.gr/>
 
 ## Requirements
-This program is designed for MS Windows with [.NET Framework 3.5](http://www.microsoft.com/el-gr/download/details.aspx?id=22) installed.
+This program is designed for MS Windows with [.NET Framework 4.0](https://www.microsoft.com/en-us/download/details.aspx?id=17718) installed.
 
 ## Screenshots
 ![Screenshot](https://raw.githubusercontent.com/multipetros/evrika/master/screenshot-en.png)
 
 ## Download
- * [Setup package](https://github.com/multipetros/evrika/releases/download/v1.0/evrika-1.0_setup.exe)
- * [Portable in zip archive](https://github.com/multipetros/evrika/releases/download/v1.0/evrika-1.0_bin.zip)
+ * [Setup package](https://github.com/multipetros/evrika/releases/download/v1.1/evrika-1.1_setup.exe)
+ * [Portable in zip archive](https://github.com/multipetros/evrika/releases/download/v1.1/evrika-1.1_bin.zip)
 
 
 ## Change Log
+### v1.1
+ * Faster search method
+ * More match types added
+ * Moved to .NET 4.0
 ### v1.0
  * Initial release
  
@@ -42,16 +46,20 @@ If you think that this program is helpful for you and you are willing to support
 Για περισσότερες πληροφορίες και ενημερώσεις δείτε στον ιστότοπο <http://multipetros.gr/>
 
 ## Απαιτήσεις
-Αυτό το πρόγραμμα έχει σχεδιαστεί για τα MS Windows με εγκατεστημένο το [.NET Framework 3.5](http://www.microsoft.com/el-gr/download/details.aspx?id=22).
+Αυτό το πρόγραμμα έχει σχεδιαστεί για τα MS Windows με εγκατεστημένο το [.NET Framework 4.0](https://www.microsoft.com/el-gr/download/details.aspx?id=17851).
 
 ## Στιγμιότυπα
 ![Στιγμιότυπο](https://raw.githubusercontent.com/multipetros/evrika/master/screenshot-el.png)
 
 ## Κατέβασμα
- * [Πακέτο εγκατάστασης](https://github.com/multipetros/evrika/releases/download/v1.0/evrika-1.0_setup.exe)
- * [Φορητή μορφή σε αρχείο zip](https://github.com/multipetros/evrika/releases/download/v1.0/evrika-1.0_bin.zip)
+ * [Πακέτο εγκατάστασης](https://github.com/multipetros/evrika/releases/download/v1.1/evrika-1.1_setup.exe)
+ * [Φορητή μορφή σε αρχείο zip](https://github.com/multipetros/evrika/releases/download/v1.1/evrika-1.1_bin.zip)
 
 ## Αλλαγές
+### v1.1
+ * Ταχύτηρη μέθοδος αναζήτησης
+ * Περισσότερες επιλογές ταιριάσματος αποτελεσμάτων
+ * Μετάβαση στο .NET 4.0
 ### v1.0
  * Αρχική έκδοση
 
